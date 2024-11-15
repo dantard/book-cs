@@ -176,23 +176,37 @@ def main():
     INSERT INTO Escuela (Estudiante, Curso, Profesor) VALUES (?, ?, ?);
     ''', escuela)
 
+    INSERT = True
+    if INSERT:
+        nombre = "Mario"
+        apellido = "Vázquez"
+        cursor.execute("INSERT INTO Estudiantes3 (Nombre, Apellido) VALUES (?, ?);", (nombre, apellido))
 
+        cursor.executemany("INSERT INTO Estudiantes3 (Nombre, Apellido) VALUES (?, ?);", [("Cristina", "Martín"), ("Lucas", "Martínez")])
+        cursor.execute("INSERT INTO Cursos (Curso, Profesor) VALUES (?, ?);", ("Química", "Prof. Puig"))
+        cursor.executemany("INSERT INTO Asociacion (ID_Estudiante, Curso) VALUES (?, ?);", [(6, "Química"), (7, "Química"), (8, "Química")])
 
+    UPDATE= True
+    if UPDATE:
+        cursor.execute("UPDATE Cursos SET Profesor = ? WHERE Curso = ?", ("Prof. Montiel", "Ciencias"))
 
     #cursor_to_latex("select Estudiante, Curso from NoNormalizada", 'Inscripciones', 'Tabla de inscripciones')
     #cursor_to_latex("select distinct Curso, Profesor from NoNormalizada", 'Inscripciones', 'Tabla de inscripciones')
     #cursor_to_latex("select * from Estudiantes", 'Inscripciones', 'Tabla Estudiantes')
     #cursor_to_latex("select * from Estudiantes3", 'Estudiante', 'Tabla de Estudiantes (v2)')
     #cursor_to_latex("select * from Asociacion", 'Asociacion', 'Tabla de Asociacion')
-    #cursor_to_latex("select * from Cursos", 'Cursos', 'Tabla de Cursos')
-    #cursor_to_latex("select * from Asociacion JOIN Estudiantes3 on Asociacion.ID_Estudiante=Estudiantes3.ID JOIN Cursos on Cursos.Curso = Asociacion.Curso","aa","aa")
+    cursor_to_latex("select * from Cursos", 'Cursos', 'Tabla de Cursos')
+    #cursor_to_latex("select Nombre, Apellido, Cursos.Curso, Profesor from Asociacion JOIN Estudiantes3 on Asociacion.ID_Estudiante=Estudiantes3.ID JOIN Cursos on Cursos.Curso = Asociacion.Curso","aa","aa")
     #cursor_to_latex("SELECT * FROM Estudiantes2, Cursos", 'Escuela', 'Tabla de Escuela')
     #cursor_to_latex("SELECT * FROM Escuela", 'Escuela', 'Tabla Escuela')
-    cursor_to_latex('''SELECT Apellido, Nombre, Profesor
-FROM Asociacion
-JOIN Estudiantes3 ON Asociacion.ID_Estudiante=Estudiantes3.ID
-JOIN Cursos on Cursos.Curso = Asociacion.Curso
-WHERE Cursos.Curso='Ciencias' ORDER BY Apellido ASC''', 'Estudiantes', 'Tabla de Estudiantes')
+    # cursor_to_latex('''SELECT Apellido, Nombre, Profesor
+    #     FROM Asociacion
+    #     JOIN Estudiantes3 ON Asociacion.ID_Estudiante=Estudiantes3.ID
+    #     JOIN Cursos on Cursos.Curso = Asociacion.Curso
+    #     WHERE Cursos.Curso='Ciencias' ORDER BY Apellido ASC''', 'Estudiantes', 'Tabla de Estudiantes')
+    # cursor_to_latex("SELECT Apellido, Nombre FROM Estudiantes3 ORDER BY Apellido ASC", "Lista de Estudiantes", "Lista de Estudiantes")
+
+
     conn.commit()
     conn.close()
 
